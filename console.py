@@ -187,6 +187,41 @@ class HBNBCommand(cmd.Cmd):
                     obj.__dict__[k] = v
         storage.save()
 
+    def do_count(self, arg):
+        """Retrieve the number of instances of a class"""
+
+        argl = parse(arg)
+        count = 0
+        for v in storage.all().values():
+            if argl[0] == v.__class__.__name__:
+                count += 1
+        print(count)
+
+    def default(self, arg):
+        """Default behavioour of cmd module when input is invalid"""
+
+        a_dict = {
+                'all': self.do_all,
+                'show': self.do_show,
+                'destroy': self.do_destroy,
+                'count': self.do_count,
+                'update': self.do_update
+                }
+
+        match = re.search(r'\.', arg)
+
+        if match is not None:
+            argl = [arg[:match.span()[0]], arg[match.span()[1]:]]
+            match = re.search(r'\((.*?)\)', argl[1])
+
+            if match is not None:
+                command = [argl[1][:match.span()[0]], match.group()[1:-1]]
+                if command[0] in a_dict.keys():
+                    call = f"{argl[0]} {command[1]}"
+                    return a_dict[command[0]](call)
+        print(f"*** Unknown syntax: {arg}")
+        return False
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

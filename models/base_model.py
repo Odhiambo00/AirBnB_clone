@@ -2,7 +2,7 @@
 
 """Defines BaseModel class"""
 
-from datetime import datetime
+from datetime import date, datetime
 from uuid import uuid4
 import models
 
@@ -26,8 +26,7 @@ class BaseModel:
                 if k == '__class__':
                     continue
                 elif k == 'created_at' or k == 'updated_at':
-                    setattr(self, k, datetime.strptime(v,
-                            '%Y-%m-%dT%H:%M:%S.%f'))
+                    setattr(self, k, datetime.fromisoformat(v))
                 else:
                     setattr(self, k, v)
         else:
