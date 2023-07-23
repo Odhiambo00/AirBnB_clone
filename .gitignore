@@ -7,3 +7,4 @@ test_save_reload_user.py
 file.json
 *~
 .vscode/
+w3c_validator.py
